@@ -7,9 +7,10 @@ interface HeaderProps {
   activeLabel: string;
   onSidebarToggle: () => void;
   onSectionChange: (section: AppSection) => void;
+  onQuickAddTransaction: () => void;
 }
 
-export function Header({ activeLabel, onSidebarToggle, onSectionChange }: HeaderProps) {
+export function Header({ activeLabel, onSidebarToggle, onSectionChange, onQuickAddTransaction }: HeaderProps) {
   return (
     <header className="sticky top-0 z-20 border-b border-border/70 bg-background/90 px-4 py-4 backdrop-blur md:px-6 lg:px-0 lg:pt-6 lg:pb-4">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-4">
@@ -32,10 +33,10 @@ export function Header({ activeLabel, onSidebarToggle, onSectionChange }: Header
               <div className="flex items-center gap-3">
                 <img src={appLogoUrl} alt="" className="h-10 w-10 rounded-2xl border border-border/70 bg-surface object-cover shadow-sm" />
                 <div>
-                <h1 className="text-2xl font-semibold tracking-tight text-text sm:text-3xl">{appName}</h1>
-                <p className="mt-1 max-w-2xl text-sm leading-6 text-text-secondary sm:text-base">
-                  Visualize your money. Understand your habits. Build your future.
-                </p>
+                  <h1 className="text-2xl font-semibold tracking-tight text-text sm:text-3xl">{appName}</h1>
+                  <p className="mt-1 max-w-2xl text-sm leading-6 text-text-secondary sm:text-base">
+                    Visualize your money. Understand your habits. Build your future.
+                  </p>
                 </div>
               </div>
             </div>
@@ -50,7 +51,9 @@ export function Header({ activeLabel, onSidebarToggle, onSectionChange }: Header
               <span>This month</span>
               <ChevronDown size={14} />
             </button>
-            <Button icon={<Plus size={16} />}>Quick Add Transaction</Button>
+            <Button icon={<Plus size={16} />} onClick={onQuickAddTransaction}>
+              Quick Add Transaction
+            </Button>
           </div>
         </div>
 
@@ -63,7 +66,7 @@ export function Header({ activeLabel, onSidebarToggle, onSectionChange }: Header
             <span>This month</span>
             <ChevronDown size={14} />
           </button>
-          <Button className="w-full" icon={<Plus size={16} />}>
+          <Button className="w-full" icon={<Plus size={16} />} onClick={onQuickAddTransaction}>
             Quick Add Transaction
           </Button>
         </div>

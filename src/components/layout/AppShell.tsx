@@ -12,6 +12,7 @@ interface AppShellProps {
   sidebarCollapsed: boolean;
   onSidebarToggle: () => void;
   onSectionChange: (section: AppSection) => void;
+  onQuickAddTransaction: () => void;
 }
 
 export function AppShell({
@@ -21,6 +22,7 @@ export function AppShell({
   sidebarCollapsed,
   onSidebarToggle,
   onSectionChange,
+  onQuickAddTransaction,
 }: AppShellProps) {
   return (
     <div className="min-h-screen bg-background text-text">
@@ -39,6 +41,7 @@ export function AppShell({
             activeLabel={activeItem.label}
             onSectionChange={onSectionChange}
             onSidebarToggle={onSidebarToggle}
+            onQuickAddTransaction={onQuickAddTransaction}
           />
 
           <main className="flex-1 px-4 pb-6 pt-5 sm:px-6 lg:px-0 lg:pr-6 xl:pr-8">

@@ -21,6 +21,16 @@ export interface Transaction {
   updatedAt?: string;
 }
 
+export interface TransactionInput {
+  title: string;
+  amount: number;
+  date: string;
+  type: TransactionType;
+  categoryId: string;
+  subcategoryId?: string;
+  note?: string;
+}
+
 export interface SavingsGoal {
   id: string;
   name: string;

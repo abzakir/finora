@@ -20,10 +20,10 @@ import {
   getExpenseCategoryBreakdown,
   getFinancialDistribution,
   getLatestMonthlySummaryComparison,
-  getSeedFinancialSummary,
-  getSeedMonthlyGroups,
+  getFinancialSummary,
+  groupTransactionsByMonth,
 } from '../lib/finance';
-import type { FinancialSummary } from '../types/finance';
+import type { Category, FinancialSummary, Transaction } from '../types/finance';
 
 const metricConfig: Array<{
   key: keyof FinancialSummary;
@@ -75,12 +75,19 @@ function ChartTooltip({ active, payload, label }: { active?: boolean; payload?: 
   );
 }
 
-export function DashboardPage() {
-  const summary = getLatestMonthlySummaryComparison();
-  const historicalSummary = getSeedFinancialSummary();
-  const monthlyGroups = getSeedMonthlyGroups();
-  const financialDistribution = getFinancialDistribution();
-  const expenseCategoryBreakdown = getExpenseCategoryBreakdown();
+interface DashboardPageProps {
+  transactions: Transaction[];
+  categories: Category[];
+  onViewTransactions: () => void;
+  onQuickAddTransaction: () => void;
+}
+
+export function DashboardPage({ transactions, categories, onViewTransactions, onQuickAddTransaction }: DashboardPageProps) {
+  const summary = getLatestMonthlySummaryComparison(transactions);
+  const historicalSummary = getFinancialSummary(transactions);
+  const monthlyGroups = groupTransactionsByMonth(transactions);
+  const financialDistribution = getFinancialDistribution(transactions);
+  const expenseCategoryBreakdown = getExpenseCategoryBreakdown(transactions, categories);
 
   return (
     <div className="space-y-6 sm:space-y-8">
@@ -98,10 +105,12 @@ export function DashboardPage() {
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <Button variant="secondary" icon={<ArrowRight size={16} />}>
+            <Button variant="secondary" icon={<ArrowRight size={16} />} onClick={onViewTransactions}>
               View transactions
             </Button>
-            <Button icon={<ArrowRight size={16} />}>Quick Add Transaction</Button>
+            <Button icon={<ArrowRight size={16} />} onClick={onQuickAddTransaction}>
+              Quick Add Transaction
+            </Button>
           </div>
         </div>
       </Card>
