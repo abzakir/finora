@@ -1,5 +1,6 @@
 import { ChevronDown, Menu, Plus } from 'lucide-react';
 import { type AppSection } from '../../config/navigation';
+import { appLogoUrl, appName } from '../../config/branding';
 import { Button } from '../ui/Button';
 
 interface HeaderProps {
@@ -28,11 +29,14 @@ export function Header({ activeLabel, onSidebarToggle, onSectionChange }: Header
               >
                 <Menu size={18} />
               </button>
-              <div>
-                <h1 className="text-2xl font-semibold tracking-tight text-text sm:text-3xl">Finora</h1>
+              <div className="flex items-center gap-3">
+                <img src={appLogoUrl} alt="" className="h-10 w-10 rounded-2xl border border-border/70 bg-surface object-cover shadow-sm" />
+                <div>
+                <h1 className="text-2xl font-semibold tracking-tight text-text sm:text-3xl">{appName}</h1>
                 <p className="mt-1 max-w-2xl text-sm leading-6 text-text-secondary sm:text-base">
                   Visualize your money. Understand your habits. Build your future.
                 </p>
+                </div>
               </div>
             </div>
           </div>

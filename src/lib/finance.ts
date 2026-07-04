@@ -2,8 +2,10 @@ import { categories as seedCategories, savingsGoals as seedSavingsGoals, transac
 import type {
   Category,
   CategoryTotal,
+  ExpenseCategoryBreakdownPoint,
   FinancialSummary,
   FinancialSummaryComparison,
+  FinancialDistributionPoint,
   IncomeExpenseComparison,
   InvestmentContributionPoint,
   MonthlyGroup,
@@ -45,6 +47,14 @@ function summaryFromMonthlyGroup(group: MonthlyGroup): FinancialSummary {
     totalInvestments: group.investments,
     totalRemittances: group.remittances,
   };
+}
+
+function toPercentage(value: number, total: number) {
+  if (total === 0) {
+    return 0;
+  }
+
+  return (value / total) * 100;
 }
 
 export function getTransactionsByType(transactions: Transaction[] = seedTransactions, type: TransactionType) {
@@ -267,6 +277,38 @@ export function getSeedMonthlyGroups() {
 
 export function getSeedSavingsGoals(): SavingsGoal[] {
   return seedSavingsGoals;
+}
+
+export function getFinancialDistribution(transactions: Transaction[] = seedTransactions): FinancialDistributionPoint[] {
+  const summary = getFinancialSummary(transactions);
+  const total = summary.monthlyExpenses + summary.totalSavings + summary.totalInvestments + summary.totalRemittances;
+
+  return [
+    { name: 'Expenses', value: summary.monthlyExpenses, percentage: toPercentage(summary.monthlyExpenses, total), color: '#8D6E63' },
+    { name: 'Savings', value: summary.totalSavings, percentage: toPercentage(summary.totalSavings, total), color: '#4C7F6A' },
+    { name: 'Investments', value: summary.totalInvestments, percentage: toPercentage(summary.totalInvestments, total), color: '#5A7C91' },
+    { name: 'Remittances', value: summary.totalRemittances, percentage: toPercentage(summary.totalRemittances, total), color: '#A86D67' },
+  ].filter((entry) => entry.value > 0);
+}
+
+export function getExpenseCategoryBreakdown(
+  transactions: Transaction[] = seedTransactions,
+  categories: Category[] = seedCategories,
+): ExpenseCategoryBreakdownPoint[] {
+  const totals = getCategoryTotals(transactions, categories, 'expense');
+  const grandTotal = totals.reduce((sum, item) => sum + item.total, 0);
+
+  return totals.map((item) => {
+    const category = categories.find((categoryItem) => categoryItem.id === item.categoryId);
+
+    return {
+      categoryId: item.categoryId,
+      categoryName: item.categoryName,
+      total: item.total,
+      percentage: toPercentage(item.total, grandTotal),
+      color: category?.color ?? '#8C8C7A',
+    };
+  });
 }
 
 export function getLatestMonthlySummaryComparison(transactions: Transaction[] = seedTransactions): FinancialSummaryComparison {

@@ -1,4 +1,5 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { appLogoUrl, appName } from '../../config/branding';
 import { navigationItems, type AppSection } from '../../config/navigation';
 import { cn } from '../../lib/cn';
 import { Button } from '../ui/Button';
@@ -17,12 +18,10 @@ export function Sidebar({ activeSection, collapsed, onSectionChange, onToggleCol
       <Card className={cn('flex h-full flex-col gap-6 overflow-hidden p-4', collapsed ? 'items-center' : 'items-stretch')}>
         <div className={cn('flex w-full items-center gap-3', collapsed ? 'justify-center' : 'justify-between')}>
           <div className={cn('flex items-center gap-3', collapsed ? 'justify-center' : 'min-w-0')}>
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
-              <span className="text-lg font-semibold">F</span>
-            </div>
+            <img src={appLogoUrl} alt="" className="h-11 w-11 rounded-2xl border border-border/70 bg-surface object-cover shadow-sm" />
             {!collapsed ? (
               <div className="min-w-0">
-                <p className="text-sm font-semibold tracking-wide text-text">Finora</p>
+                <p className="text-sm font-semibold tracking-wide text-text">{appName}</p>
                 <p className="text-xs text-text-muted">Personal finance dashboard</p>
               </div>
             ) : null}

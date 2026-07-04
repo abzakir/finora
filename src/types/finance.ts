@@ -98,3 +98,18 @@ export interface InvestmentContributionPoint {
   label: string;
   totalInvestments: number;
 }
+
+export interface FinancialDistributionPoint {
+  name: string;
+  value: number;
+  percentage: number;
+  color: string;
+}
+
+export interface ExpenseCategoryBreakdownPoint {
+  categoryId: string;
+  categoryName: string;
+  total: number;
+  percentage: number;
+  color: string;
+}
