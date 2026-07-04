@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AppShell } from './components/layout/AppShell';
 import { DashboardPage } from './pages/DashboardPage';
 import { ComingSoonPage } from './pages/ComingSoonPage';
+import { TransactionsPage } from './pages/TransactionsPage';
 import { type AppSection, navigationItems } from './config/navigation';
 import { appLogoUrl } from './config/branding';
 
@@ -41,7 +42,13 @@ function App() {
       onSidebarToggle={() => setSidebarCollapsed((current) => !current)}
       onSectionChange={setActiveSection}
     >
-      {activeSection === 'dashboard' ? <DashboardPage /> : <ComingSoonPage sectionLabel={activeItem.label} />}
+      {activeSection === 'dashboard' ? (
+        <DashboardPage />
+      ) : activeSection === 'transactions' ? (
+        <TransactionsPage />
+      ) : (
+        <ComingSoonPage sectionLabel={activeItem.label} />
+      )}
     </AppShell>
   );
 }
