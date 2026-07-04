@@ -76,6 +76,14 @@ export interface IncomeExpenseComparison {
   savingsRate: number | null;
 }
 
+export interface FinancialSummaryComparison {
+  currentPeriod: string;
+  previousPeriod: string | null;
+  current: FinancialSummary;
+  previous: FinancialSummary | null;
+  changes: Partial<Record<keyof FinancialSummary, PercentageChange>>;
+}
+
 export interface SavingsTrendPoint {
   month: string;
   year: number;

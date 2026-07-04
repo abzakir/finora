@@ -3,6 +3,7 @@ import type {
   Category,
   CategoryTotal,
   FinancialSummary,
+  FinancialSummaryComparison,
   IncomeExpenseComparison,
   InvestmentContributionPoint,
   MonthlyGroup,
@@ -33,6 +34,17 @@ function getCategoryMap(categories: Category[] = seedCategories) {
 
 function sumValues(transactions: Transaction[]) {
   return transactions.reduce((total, transaction) => total + transaction.amount, 0);
+}
+
+function summaryFromMonthlyGroup(group: MonthlyGroup): FinancialSummary {
+  return {
+    totalBalance: group.income - group.expenses - group.savings - group.investments - group.remittances,
+    monthlyIncome: group.income,
+    monthlyExpenses: group.expenses,
+    totalSavings: group.savings,
+    totalInvestments: group.investments,
+    totalRemittances: group.remittances,
+  };
 }
 
 export function getTransactionsByType(transactions: Transaction[] = seedTransactions, type: TransactionType) {
@@ -156,8 +168,8 @@ export function groupTransactionsByDateRange(
 
   return groupTransactionsByMonth(
     transactions.filter((transaction) => {
-    const transactionDate = normalizeDate(transaction.date);
-    return transactionDate >= normalizedStartDate && transactionDate <= normalizedEndDate;
+      const transactionDate = normalizeDate(transaction.date);
+      return transactionDate >= normalizedStartDate && transactionDate <= normalizedEndDate;
     }),
   );
 }
@@ -255,4 +267,28 @@ export function getSeedMonthlyGroups() {
 
 export function getSeedSavingsGoals(): SavingsGoal[] {
   return seedSavingsGoals;
+}
+
+export function getLatestMonthlySummaryComparison(transactions: Transaction[] = seedTransactions): FinancialSummaryComparison {
+  const monthlyGroups = groupTransactionsByMonth(transactions);
+  const currentMonth = monthlyGroups[monthlyGroups.length - 1] ?? null;
+  const previousMonth = monthlyGroups[monthlyGroups.length - 2] ?? null;
+
+  const current = currentMonth ? summaryFromMonthlyGroup(currentMonth) : getFinancialSummary([]);
+  const previous = previousMonth ? summaryFromMonthlyGroup(previousMonth) : null;
+  const changes: FinancialSummaryComparison['changes'] = {};
+
+  if (previous) {
+    (Object.keys(current) as Array<keyof FinancialSummary>).forEach((metric) => {
+      changes[metric] = calculatePercentageChange(current[metric], previous[metric]);
+    });
+  }
+
+  return {
+    currentPeriod: currentMonth?.label ?? 'No data',
+    previousPeriod: previousMonth?.label ?? null,
+    current,
+    previous,
+    changes,
+  };
 }
