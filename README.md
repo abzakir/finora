@@ -550,6 +550,7 @@ This means:
 * Cloud synchronization is not available during the local-only stage.
 
 The storage architecture is intentionally separated from the interface so that a cloud-based persistence layer can be introduced in a future phase.
+But it will soon be integrated
 
 <br>
 
